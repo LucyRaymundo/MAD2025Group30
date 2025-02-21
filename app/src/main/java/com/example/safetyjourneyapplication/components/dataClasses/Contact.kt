@@ -1,13 +1,13 @@
 package com.example.safetyjourneyapplication.components.dataClasses
 
+import java.time.LocalDate
+import java.time.LocalDateTime
+
 data class Contact(
-    var id: Int,
-    val title: String,
-    val author: String,
-    val genre: String,
-    val totalNumOfPages: Int,
-    var currentPage: Int = 0
-) {
-    val readingProgress: Double
-        get() = currentPage.toDouble() / totalNumOfPages * 100
-}
+    var contactID: Int,
+    val contactUserID: Int,
+    val contactUserName: String,
+    val contactContactID: Int,
+    val contactLabel: String,
+    val dateTimeCreated: LocalDateTime = LocalDateTime.now(),
+)
