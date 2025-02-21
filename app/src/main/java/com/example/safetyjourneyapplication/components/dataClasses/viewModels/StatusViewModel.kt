@@ -1,0 +1,16 @@
+package com.example.safetyjourneyapplication.components.dataClasses.viewModels
+
+
+import androidx.compose.runtime.mutableStateListOf
+import androidx.lifecycle.ViewModel
+import com.example.safetyjourneyapplication.components.dataClasses.Status
+
+class StatusViewModel : ViewModel() {
+    var statuses =
+        mutableStateListOf(
+                Status.PENDING,
+                Status.STARTED,
+                Status.PAUSED,
+                Status.ABANDONED,
+                Status.COMPLETED
+        ) }
