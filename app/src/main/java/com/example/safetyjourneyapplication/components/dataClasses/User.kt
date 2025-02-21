@@ -1,6 +1,5 @@
 package com.example.safetyjourneyapplication.components.dataClasses
 
-
 data class Book(
     var id: Int,
     val title: String,
