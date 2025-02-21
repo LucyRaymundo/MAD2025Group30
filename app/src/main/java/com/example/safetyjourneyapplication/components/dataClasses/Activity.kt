@@ -13,4 +13,5 @@ data class Activity(
     val activityEndLocation: Location,
     val activityArriveTimeDate: LocalDateTime = LocalDateTime.now(),
     val activityStatus: Status
+
 )

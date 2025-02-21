@@ -5,6 +5,6 @@ data class User (
     val userFirstName: String,
     val userLastName: String,
     val userPhone: String,
-    val userName: String,
+    val userName: String
 )
 

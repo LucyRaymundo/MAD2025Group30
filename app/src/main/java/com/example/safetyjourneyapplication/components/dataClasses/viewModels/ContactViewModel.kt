@@ -15,6 +15,7 @@ class ContactViewModel : ViewModel() {
                 contactContactID = 1, // need to edit
                 contactLabel = "Mother",
                 dateTimeCreated = LocalDateTime.now()
+
             )
         )
 }

@@ -1,6 +1,4 @@
-package com.example.safetyjourneyapplication.components.dataClasses.viewModels
-
-import android.media.MicrophoneInfo.Coordinate3F
+package com.example.safetyjourneyapplication.components.dataClasses
 
 data class Location(
     val locationID: String,

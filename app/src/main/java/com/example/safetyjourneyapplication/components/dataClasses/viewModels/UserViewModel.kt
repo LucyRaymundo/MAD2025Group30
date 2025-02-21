@@ -12,7 +12,8 @@ class UserViewModel : ViewModel() {
                 userFirstName = "Olivia",
                 userLastName = "Kuang",
                 userPhone = "07664910347",
-                userName = "OliviaKuang23",
+                userName = "OliviaKuang23"
+
             )
         )
 }

@@ -9,5 +9,5 @@ data class Contact(
     val contactUserName: String,
     val contactContactID: Int,
     val contactLabel: String,
-    val dateTimeCreated: LocalDateTime = LocalDateTime.now(),
+    val dateTimeCreated: LocalDateTime = LocalDateTime.now()
 )

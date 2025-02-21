@@ -18,7 +18,8 @@ class ActivityViewModel : ViewModel() {
                 activityStartTimeDate = LocalDateTime.now(),
                 activityEndLocation = ,
                 activityArriveTimeDate = LocalDateTime.now(),
-                activityStatus =  ,
+                activityStatus =
+
             )
         )
 }
