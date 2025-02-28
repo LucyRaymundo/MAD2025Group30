@@ -1,4 +1,4 @@
-package com.example.safetyjourneyapplication.components.dataClasses.viewModels
+package com.example.safetyjourneyapplication.components.viewModels
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
@@ -15,7 +15,6 @@ class ContactViewModel : ViewModel() {
                 contactContactID = 1, // need to edit
                 contactLabel = "Mother",
                 dateTimeCreated = LocalDateTime.now()
-
             )
         )
 }

@@ -1,4 +1,4 @@
-package com.example.safetyjourneyapplication.components.dataClasses.viewModels
+package com.example.safetyjourneyapplication.components.viewModels
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel

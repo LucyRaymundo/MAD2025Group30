@@ -1,4 +1,4 @@
-package com.example.safetyjourneyapplication.components.dataClasses.viewModels
+package com.example.safetyjourneyapplication.components.viewModels
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
@@ -13,7 +13,6 @@ class UserViewModel : ViewModel() {
                 userLastName = "Kuang",
                 userPhone = "07664910347",
                 userName = "OliviaKuang23"
-
             )
         )
 }
