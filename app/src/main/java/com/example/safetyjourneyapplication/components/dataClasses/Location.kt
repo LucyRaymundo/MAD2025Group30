@@ -1,7 +1,7 @@
 package com.example.safetyjourneyapplication.components.dataClasses
 
 data class Location(
-    val locationID: String,
+    val locationID: Int,
     val locationName: String,
     val locationAddress: String,
     val locationPostcode: String,
