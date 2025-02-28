@@ -21,7 +21,6 @@ class ActivityViewModel(private val LocationViewModel: LocationViewModel) : View
                 activityEndLocation = LocationViewModel.locations.find { it.locationID == 2 }!!,
                 activityArriveTimeDate = LocalDateTime.now(),
                 activityStatus = Status.PENDING
-
             )
         )
 }
