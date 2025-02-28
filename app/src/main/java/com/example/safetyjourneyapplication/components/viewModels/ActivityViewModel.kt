@@ -7,7 +7,7 @@ import com.example.safetyjourneyapplication.components.dataClasses.Status
 import com.example.safetyjourneyapplication.components.viewModels.LocationViewModel
 import java.time.LocalDateTime
 
-class ActivityViewModel(LocationViewModel: LocationViewModel) : ViewModel() {
+class ActivityViewModel(private val LocationViewModel: LocationViewModel) : ViewModel() {
     var activities =
         mutableStateListOf( // mutable list and snapshotStateList = allows for modification and state recompositions
             Activity(
@@ -16,11 +16,12 @@ class ActivityViewModel(LocationViewModel: LocationViewModel) : ViewModel() {
                 activityUserID = 1,
                 activityUserName = "OliviaKuang",
                 activityDescription = "aksjsnfjjgjgjgooof",
-                activityStartLocation = LocationViewModel.locations.find { it.locationID == "001" }!!,
+                activityStartLocation = LocationViewModel.locations.find { it.locationID == 1 }!!,
                 activityStartTimeDate = LocalDateTime.now(),
-                activityEndLocation = LocationViewModel.locations.find { it.locationID == "002" }!!,
+                activityEndLocation = LocationViewModel.locations.find { it.locationID == 2 }!!,
                 activityArriveTimeDate = LocalDateTime.now(),
                 activityStatus = Status.PENDING
+
             )
         )
 }

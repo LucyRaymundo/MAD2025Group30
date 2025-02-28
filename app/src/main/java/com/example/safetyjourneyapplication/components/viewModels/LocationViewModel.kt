@@ -9,14 +9,14 @@ class LocationViewModel : ViewModel() {
     var locations =
         mutableStateListOf(
             Location(
-                locationID = "001",
+                locationID = 1,
                 locationName = "far,far away",
                 locationAddress = "Where judas lost his boots",
                 locationPostcode = "1BJ 0BS",
                 locationCoordinate = Coordinate(latitude = 51.509865, longitude = -0.118092 )
             ),
             Location(
-                locationID = "002",
+                locationID = 2,
                 locationName = "home",
                 locationAddress = "41 home address",
                 locationPostcode = "EBJ 2QS",
