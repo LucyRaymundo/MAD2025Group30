@@ -3,6 +3,7 @@ package com.example.safetyjourneyapplication.components.dataClasses.viewModels
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.example.safetyjourneyapplication.components.dataClasses.Activity
+import com.example.safetyjourneyapplication.components.dataClasses.Status
 import java.time.LocalDateTime
 
 class ActivityViewModel : ViewModel() {
@@ -18,7 +19,7 @@ class ActivityViewModel : ViewModel() {
                 activityStartTimeDate = LocalDateTime.now(),
                 activityEndLocation = ,
                 activityArriveTimeDate = LocalDateTime.now(),
-                activityStatus =
+                activityStatus = Status.PENDING
 
             )
         )
