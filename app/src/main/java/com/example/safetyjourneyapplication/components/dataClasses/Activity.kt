@@ -2,7 +2,9 @@ package com.example.safetyjourneyapplication.components.dataClasses
 
 import java.time.LocalDateTime
 
+// @Entity(tableName = "activities")
 data class Activity(
+    // @PrimaryKey
     var activityID: Int,
     val activityName: String,
     val activityUserID: Int,
