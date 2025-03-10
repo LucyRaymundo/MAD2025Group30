@@ -2,13 +2,12 @@ package com.example.safetyjourneyapplication.components.viewModels
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import com.example.safetyjourneyapplication.components.dataClasses.Activity
-import com.example.safetyjourneyapplication.components.dataClasses.Status
-import com.example.safetyjourneyapplication.components.viewModels.LocationViewModel
+import com.example.safetyjourneyapplication.components.classes.Activity
+import com.example.safetyjourneyapplication.components.classes.Status
 import java.time.LocalDateTime
 
 class ActivityViewModel(private val LocationViewModel: LocationViewModel) : ViewModel() {
-    var activities =
+    /* var activities =
         mutableStateListOf( // mutable list and snapshotStateList = allows for modification and state recompositions
             Activity(
                 activityID = 1,
@@ -22,5 +21,5 @@ class ActivityViewModel(private val LocationViewModel: LocationViewModel) : View
                 activityArriveTimeDate = LocalDateTime.now(),
                 activityStatus = Status.PENDING
             )
-        )
+        ) */
 }

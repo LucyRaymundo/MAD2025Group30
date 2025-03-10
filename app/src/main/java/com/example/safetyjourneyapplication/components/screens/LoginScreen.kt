@@ -1,6 +1,7 @@
 package com.example.safetyjourneyapplication.components.screens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,24 +21,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.bookmanagementapp.components.models.Screen
-import com.example.safetyjourneyapplication.components.classes.User
 import com.example.safetyjourneyapplication.components.daos.ContactDao
 import com.example.safetyjourneyapplication.components.daos.UserDao
-import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 @Composable
-fun SignUpScreen(
+fun LoginScreen(
     navController: NavController,
     userDao: UserDao
-    ) {
-
+) {
     val coroutineScope = rememberCoroutineScope()
 
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
     var userName by remember { mutableStateOf("") }
-    var phoneNum by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     Column(
@@ -47,7 +41,7 @@ fun SignUpScreen(
     ) {
 
         Text(
-            "Sign Up to StaySafe",
+            "Login to StaySafe",
             style = TextStyle(
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
@@ -56,36 +50,9 @@ fun SignUpScreen(
         )
 
         TextField(
-            value = firstName,
-            onValueChange = { firstName = it },
-            label = { Text("Enter your first name") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, bottom = 20.dp)
-        )
-
-        TextField(
-            value = lastName,
-            onValueChange = { lastName = it },
-            label = { Text("Enter your last name") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, bottom = 20.dp)
-        )
-
-        TextField(
-            value = phoneNum,
-            onValueChange = { phoneNum = it },
-            label = { Text("Enter your phone number") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, bottom = 20.dp)
-        )
-
-        TextField(
             value = userName,
             onValueChange = { userName = it },
-            label = { Text("Enter a username") },
+            label = { Text("Enter your username") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp, bottom = 20.dp)
@@ -94,43 +61,27 @@ fun SignUpScreen(
         TextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Enter a password") },
+            label = { Text("Enter your password") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp, bottom = 20.dp)
         )
 
         Button(
-            onClick = {
-                coroutineScope.launch {
-                    val newUser = User(userFirstName = firstName, userLastName = lastName, userPhone = phoneNum, userName = userName, userPassword = password)
-                    userDao.insertUser(newUser)
-                    navController.navigate(Screen.MainScreen.route)
-                }
-            },
+            onClick = {},
             modifier = Modifier.padding(top = 15.dp, start = 135.dp)
         ) {
-            Text("Sign Up")
+            Text("Login")
         }
 
         Button(
             onClick = {
                 navController.popBackStack() },
             modifier = Modifier
-                .padding(start = 145.dp, top = 20.dp)
+                .padding(start = 135.dp, top = 20.dp)
         )
         {
             Text( "Back")
         }
     }
-}
-
-@Composable
-fun addContactsForm(
-    contactDao: ContactDao,
-    userDao: UserDao
-){
-
-
-
 }

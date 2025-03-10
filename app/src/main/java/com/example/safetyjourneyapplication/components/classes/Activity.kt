@@ -1,11 +1,12 @@
-package com.example.safetyjourneyapplication.components.dataClasses
+package com.example.safetyjourneyapplication.components.classes
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.time.LocalDateTime
 
-// @Entity(tableName = "activities")
+@Entity(tableName = "activities")
 data class Activity(
-    // @PrimaryKey
-    var activityID: Int,
+    @PrimaryKey var activityID: Int,
     val activityName: String,
     val activityUserID: Int,
     val activityUserName: String,

@@ -2,11 +2,11 @@ package com.example.safetyjourneyapplication.components.viewModels
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import com.example.safetyjourneyapplication.components.dataClasses.Coordinate
-import com.example.safetyjourneyapplication.components.dataClasses.Location
+import com.example.safetyjourneyapplication.components.classes.Coordinate
+import com.example.safetyjourneyapplication.components.classes.Location
 
 class LocationViewModel : ViewModel() {
-    var locations =
+    /* var locations =
         mutableStateListOf(
             Location(
                 locationID = 1,
@@ -25,5 +25,5 @@ class LocationViewModel : ViewModel() {
 
 
 
-        ) }
+        ) */}
 

@@ -1,4 +1,4 @@
-package com.example.safetyjourneyapplication.components.dataClasses
+package com.example.safetyjourneyapplication.components.classes
 
 enum class Status(val id: String, val order: Int) {
     PENDING("pending", 1),
