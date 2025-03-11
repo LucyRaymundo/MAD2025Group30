@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -40,6 +41,9 @@ fun SignUpScreen(
     var phoneNum by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    var newUser by remember { mutableStateOf<User?>(null) }
+    var showConfirmAlert by remember {mutableStateOf(false)}
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -56,7 +60,7 @@ fun SignUpScreen(
         )
 
         TextField(
-            value = firstName,
+            value = firstName.replaceFirstChar { it.uppercase() },
             onValueChange = { firstName = it },
             label = { Text("Enter your first name") },
             modifier = Modifier
@@ -65,7 +69,7 @@ fun SignUpScreen(
         )
 
         TextField(
-            value = lastName,
+            value = lastName.replaceFirstChar { it.uppercase() },
             onValueChange = { lastName = it },
             label = { Text("Enter your last name") },
             modifier = Modifier
@@ -103,14 +107,22 @@ fun SignUpScreen(
         Button(
             onClick = {
                 coroutineScope.launch {
-                    val newUser = User(userFirstName = firstName, userLastName = lastName, userPhone = phoneNum, userName = userName, userPassword = password)
-                    userDao.insertUser(newUser)
-                    navController.navigate(Screen.MainScreen.route)
+                    newUser = User(userFirstName = firstName, userLastName = lastName, userPhone = phoneNum, userName = userName, userPassword = password)
+                    userDao.insertUser(newUser!!)
                 }
+                showConfirmAlert = true
             },
             modifier = Modifier.padding(top = 15.dp, start = 135.dp)
         ) {
             Text("Sign Up")
+        }
+
+        if (showConfirmAlert == true && newUser != null) {
+                ConfirmUserAddedAlert(
+                    newUser = newUser!!,
+                    onClose = { showConfirmAlert = false },
+                    onNavigate = { navController.navigate(Screen.MainScreen.route)}
+                )
         }
 
         Button(
@@ -126,11 +138,23 @@ fun SignUpScreen(
 }
 
 @Composable
-fun addContactsForm(
-    contactDao: ContactDao,
-    userDao: UserDao
-){
+fun ConfirmUserAddedAlert(
+    newUser: User,
+    onClose: () -> Unit,
+    onNavigate: () -> Unit
+) {
 
-
-
+    AlertDialog(
+        onDismissRequest = onClose,
+        text = { Text("${newUser.userFirstName}, welcome to StaySafe !") },
+        confirmButton = {
+            Button(onClick = {
+                onClose()
+                onNavigate()
+            })
+            {
+                Text("Get Started !")
+            }
+        }
+    )
 }

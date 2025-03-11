@@ -10,8 +10,7 @@ import com.example.safetyjourneyapplication.components.daos.UserDao
 fun AccountScreen(
     navController: NavController,
     userDao: UserDao,
-    contactDao: ContactDao,
-    activityDao: ActivityDao
+    contactDao: ContactDao
     ) {
 
 }

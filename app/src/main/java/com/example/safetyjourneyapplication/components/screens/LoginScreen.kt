@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -21,8 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.bookmanagementapp.components.models.Screen
+import com.example.safetyjourneyapplication.components.classes.User
 import com.example.safetyjourneyapplication.components.daos.ContactDao
 import com.example.safetyjourneyapplication.components.daos.UserDao
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -33,6 +36,12 @@ fun LoginScreen(
 
     var userName by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    var userId by remember { mutableStateOf<Int?>(null) }
+    var userFirstName by remember { mutableStateOf("") }
+
+    var showConfirmAlert by remember {mutableStateOf(false)}
+    var showErrorAlert by remember {mutableStateOf(false)}
 
     Column(
         modifier = Modifier
@@ -68,10 +77,36 @@ fun LoginScreen(
         )
 
         Button(
-            onClick = {},
+            onClick = {
+                coroutineScope.launch {
+                    userId = userDao.checkUserExists(userName, password)
+                    if (userId != null) {
+                        userFirstName = userDao.getUserFirstName(userId!!)
+                        showConfirmAlert = true
+                    }
+                    else {
+                        showErrorAlert = true
+                    }
+                }
+            },
             modifier = Modifier.padding(top = 15.dp, start = 135.dp)
         ) {
             Text("Login")
+        }
+
+        if (showConfirmAlert == true && userId != null) {
+            ConfirmUserExistsAlert(
+                userFirstName = userFirstName,
+                onClose = { showConfirmAlert = false },
+                onNavigate = { navController.navigate(Screen.MainScreen.route)}
+            )
+        }
+
+        if (showErrorAlert == true && userId == null) {
+            ConfirmUserDoesNotExistAlert(
+                onClose = { showErrorAlert = false },
+                onNavigateToSignUp = {  navController.navigate(Screen.SignUpScreen.route) }
+            )
         }
 
         Button(
@@ -84,4 +119,53 @@ fun LoginScreen(
             Text( "Back")
         }
     }
+}
+
+
+@Composable
+fun ConfirmUserExistsAlert(
+    userFirstName: String,
+    onClose: () -> Unit,
+    onNavigate: () -> Unit
+) {
+
+    AlertDialog(
+        onDismissRequest = onClose,
+        text = { Text("${userFirstName}, welcome back to StaySafe !") },
+        confirmButton = {
+            Button(onClick = {
+                onClose()
+                onNavigate()
+            })
+            {
+                Text("Enter")
+            }
+        }
+    )
+}
+
+
+@Composable
+fun ConfirmUserDoesNotExistAlert(
+    onClose: () -> Unit,
+    onNavigateToSignUp: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onClose,
+        text = { Text("Your username and/or password doesn't exist, try again or sign up") },
+        confirmButton = {
+            Button(onClick = {
+                onClose()
+            }) {
+                Text("Try again")
+            }
+        },
+        dismissButton = {
+            Button(onClick = {
+                onNavigateToSignUp()
+            }) {
+                Text("Sign Up")
+            }
+        }
+    )
 }

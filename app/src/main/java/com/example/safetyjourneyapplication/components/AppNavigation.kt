@@ -33,13 +33,13 @@ fun AppNavigation(
             MainScreen(navController, activityDao, userDao, contactDao)
         }
         composable(Screen.SignUpOrLoginScreen.route) {
-            SignUpOrLoginScreen(navController, userDao, contactDao)
+            SignUpOrLoginScreen(navController)
         }
         composable(Screen.TripsScreen.route) {
             TripsScreen(navController, activityDao)
         }
         composable(Screen.AccountScreen.route) {
-            AccountScreen(navController, userDao, contactDao, activityDao)
+            AccountScreen(navController, userDao, contactDao)
         }
         composable(Screen.ContactsScreen.route) {
             ContactsScreen(navController, userDao, contactDao)

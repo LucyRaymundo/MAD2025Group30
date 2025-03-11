@@ -28,7 +28,7 @@ import com.example.safetyjourneyapplication.components.daos.ContactDao
 import com.example.safetyjourneyapplication.components.daos.UserDao
 
 @Composable
-fun SignUpOrLoginScreen(navController: NavController, userDao: UserDao, contactDao: ContactDao) {
+fun SignUpOrLoginScreen(navController: NavController) {
 
     Column(
         modifier = Modifier
@@ -46,10 +46,19 @@ fun SignUpOrLoginScreen(navController: NavController, userDao: UserDao, contactD
         )
 
         Text(
+            "Enhance your personal safety by allowing your friends and family to check in on your planned walking, jogging, cycling or taxi trips ",
+            style = TextStyle(
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Medium
+            ),
+            modifier = Modifier.padding(top = 20.dp, bottom = 20.dp, start = 23.dp)
+        )
+
+        Text(
             "Login or Sign up below",
             style = TextStyle(
                 fontSize = 15.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.SemiBold
             ),
             modifier = Modifier.padding(top = 20.dp, bottom = 20.dp, start = 23.dp)
         )
@@ -63,7 +72,7 @@ fun SignUpOrLoginScreen(navController: NavController, userDao: UserDao, contactD
 
         Button(
             onClick = { navController.navigate(Screen.LoginScreen.route) },
-            modifier = Modifier.padding(top = 200.dp, start = 50.dp)
+            modifier = Modifier.padding(top = 285.dp, start = 50.dp)
         ) {
             Text("Login")
         }
@@ -74,7 +83,6 @@ fun SignUpOrLoginScreen(navController: NavController, userDao: UserDao, contactD
         ) {
             Text("Sign Up")
         }
-
     }
 
 }
