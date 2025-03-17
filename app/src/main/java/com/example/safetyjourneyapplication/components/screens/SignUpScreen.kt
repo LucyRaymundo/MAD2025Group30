@@ -121,7 +121,7 @@ fun SignUpScreen(
                 ConfirmUserAddedAlert(
                     newUser = newUser!!,
                     onClose = { showConfirmAlert = false },
-                    onNavigate = { navController.navigate(Screen.MainScreen.route)}
+                    onNavigate = { navController.navigate("Main_screen/${newUser!!.userId}")}
                 )
         }
 

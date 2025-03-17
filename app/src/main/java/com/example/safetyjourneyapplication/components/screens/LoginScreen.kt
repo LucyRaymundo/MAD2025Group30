@@ -98,7 +98,7 @@ fun LoginScreen(
             ConfirmUserExistsAlert(
                 userFirstName = userFirstName,
                 onClose = { showConfirmAlert = false },
-                onNavigate = { navController.navigate(Screen.MainScreen.route)}
+                onNavigate = { navController.navigate("Main_screen/${userId}")}
             )
         }
 

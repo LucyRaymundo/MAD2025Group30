@@ -1,7 +1,7 @@
 package com.example.bookmanagementapp.components.models
 
 sealed class Screen(val route: String) {
-    object MainScreen : Screen("MainScreen")
+    object MainScreen : Screen("Main_screen/{userId}")
     object SignUpOrLoginScreen: Screen("SignUpOrLoginScreen")
     object AccountScreen: Screen("AccountScreen")
     object ContactsScreen: Screen("ContactsScreen")

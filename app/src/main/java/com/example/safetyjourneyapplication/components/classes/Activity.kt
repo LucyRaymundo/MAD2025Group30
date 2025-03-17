@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 @Entity(tableName = "activities")
 data class Activity(
-    @PrimaryKey var activityID: Int,
+    @PrimaryKey var activityID: Int = 0,
     val activityName: String,
     val activityUserID: Int,
     val activityUserName: String,

@@ -18,4 +18,9 @@ interface UserDao {
     @Query("SELECT userFirstName FROM users WHERE userId = :id")
     suspend fun getUserFirstName(id: Int): String
 
+    @Query("SELECT userLastName FROM users WHERE userId = :id")
+    suspend fun getUserLastName(id: Int): String
+
+
+
 }
