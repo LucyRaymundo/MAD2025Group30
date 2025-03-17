@@ -9,12 +9,14 @@ data class Activity(
     @PrimaryKey var activityID: Int = 0,
     val activityName: String,
     val activityUserID: Int,
-    val activityUserName: String,
+    val activityUserUsername: String,
     val activityDescription: String,
-    val activityStartLocation: Location,
-    val activityStartTimeDate: LocalDateTime = LocalDateTime.now(),
-    val activityEndLocation: Location,
+    val activityStartLocationID: Int,
+    val activityStartLocationName: String,
+    val activityLeaveTimeDate: LocalDateTime = LocalDateTime.now(),
+    val activityDestinationID: Int,
+    val activityDestinationName: String,
     val activityArriveTimeDate: LocalDateTime = LocalDateTime.now(),
-    val activityStatus: Status
-
+    val activityStatusID: Int,
+    val activityStatusName: String
 )

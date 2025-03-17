@@ -2,7 +2,6 @@ package com.example.safetyjourneyapplication.components.viewModels
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import com.example.safetyjourneyapplication.components.classes.Coordinate
 import com.example.safetyjourneyapplication.components.classes.Location
 
 class LocationViewModel : ViewModel() {

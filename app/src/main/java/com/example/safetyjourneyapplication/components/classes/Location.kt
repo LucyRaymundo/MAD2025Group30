@@ -5,11 +5,6 @@ data class Location(
     val locationName: String,
     val locationAddress: String,
     val locationPostcode: String,
-    val locationCoordinate: Coordinate
+    val locationCoordinate: Int,
+    val locationLongitude: Int,
 )
-
-data class Coordinate(
-    val latitude: Double,
-    val longitude: Double
-) {
-}

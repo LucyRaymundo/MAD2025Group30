@@ -12,9 +12,8 @@ data class User (
     val userPhone: String,
     val userName: String,
     val userPassword: String,
-    //val userLatitude: Coordinate,
-    //val userLongitude: Coordinate,
-    //val userTimeStamp: LocalDateTime = LocalDateTime.now()
-
+    val userLatitude: Int = 0,
+    val userLongitude: Int = 0,
+    val userTimeStamp: LocalDateTime = LocalDateTime.now()
 )
 

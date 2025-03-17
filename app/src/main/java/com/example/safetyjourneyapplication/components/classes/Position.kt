@@ -6,6 +6,7 @@ data class Position(
     val positionID: Int,
     val positionActivityID: Int,
     val positionActivityName: String,
-    val positionCoordinate: Coordinate,
+    val positionLongitude: Int,
+    val positionLatitude: Int,
     val positionDatetime: LocalDateTime = LocalDateTime.now()
 )

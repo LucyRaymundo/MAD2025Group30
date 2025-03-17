@@ -1,8 +1,10 @@
 package com.example.safetyjourneyapplication.components.screens
 
+import android.os.Bundle
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -15,10 +17,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.example.safetyjourneyapplication.components.classes.Activity
 import com.example.safetyjourneyapplication.components.classes.Location
@@ -26,7 +30,10 @@ import com.example.safetyjourneyapplication.components.classes.User
 import com.example.safetyjourneyapplication.components.daos.ActivityDao
 import com.example.safetyjourneyapplication.components.daos.ContactDao
 import com.example.safetyjourneyapplication.components.daos.UserDao
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.MapView
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 @Composable
 fun MainScreen(
@@ -42,13 +49,13 @@ fun MainScreen(
     var userLastName by remember { mutableStateOf("") }
 
     var newActivity by remember { mutableStateOf<Activity?>(null) }
-
-   // var startLocation by remember { mutableStateOf<Location?>(null) }
-   // var endLocation by remember { mutableStateOf<Location?>(null) }
+    var activityName by remember { mutableStateOf("") }
+    var activityDescription by remember { mutableStateOf("") }
+    var activityLeaveTimeDate by remember {  mutableStateOf<LocalDateTime?>(null) }
+    var activityArriveTimeDate by remember {  mutableStateOf<LocalDateTime?>(null) }
 
     var startLocation by remember { mutableStateOf("") }
     var endLocation by remember { mutableStateOf("") }
-
 
     LaunchedEffect(userId) {
         coroutineScope.launch {
@@ -63,7 +70,6 @@ fun MainScreen(
             .padding(20.dp)
     ) {
 
-
         Text(
             "Welcome ${userFirstName} ${userLastName}, start your next journey !",
             style = TextStyle(
@@ -75,7 +81,7 @@ fun MainScreen(
 
         TextField(
             value = startLocation,
-            onValueChange = { startLocation = it },
+            onValueChange = { startLocation = it  },
             label = { Text("Enter your start location") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -94,8 +100,8 @@ fun MainScreen(
         Button(
             onClick = {
                 coroutineScope.launch {
-                   // newActivity = Activity(activityName = , activityDescription = , activityStartLocation = startLocation, activityEndLocation = endLocation)
-                   // activityDao.insertActivity(newActivity)
+                   //newActivity = Activity(activityName = activityName, activityUserID = userId, activityDescription = activityDescription, activityStartLocationID = , activityStartLocationName = startLocation, activityLeaveTimeDate = , activityDestinationID = , activityDestinationName = endLocation, activityStatusID = , activityStatusName =  )
+                   //activityDao.insertActivity(newActivity)
                 }
             },
             modifier = Modifier.padding(top = 15.dp, start = 120.dp)
@@ -104,8 +110,25 @@ fun MainScreen(
         }
     }
 
+}
 
+@Composable
+fun MapScreen() {
+    val context = LocalContext.current
+    val mapView = remember { MapView(context) }
 
+    AndroidView(
+        factory = { mapView },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(300.dp) // Restrict height to avoid blank screen
+    ) { mapView ->
+        mapView.onCreate(Bundle())  // Ensure lifecycle methods are handled
+        mapView.onResume()
 
-
+        mapView.getMapAsync { googleMap ->
+            googleMap.uiSettings.isZoomControlsEnabled = true
+            googleMap.moveCamera(CameraUpdateFactory.zoomTo(10f))
+        }
+    }
 }

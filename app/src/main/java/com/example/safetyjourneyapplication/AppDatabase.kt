@@ -10,7 +10,7 @@ import com.example.safetyjourneyapplication.components.daos.ActivityDao
 import com.example.safetyjourneyapplication.components.daos.ContactDao
 import com.example.safetyjourneyapplication.components.daos.UserDao
 
-@Database(entities = [User::class, Contact:: class, Activity::class], version = 1)
+@Database(entities = [User::class, Contact:: class, Activity::class], version = 2, exportSchema = false)
 @TypeConverters(DataTypeConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun UserDao(): UserDao
