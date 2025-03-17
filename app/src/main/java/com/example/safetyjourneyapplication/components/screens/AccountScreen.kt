@@ -8,6 +8,7 @@ import com.example.safetyjourneyapplication.components.daos.UserDao
 
 @Composable
 fun AccountScreen(
+    userId: Int,
     navController: NavController,
     userDao: UserDao,
     contactDao: ContactDao
