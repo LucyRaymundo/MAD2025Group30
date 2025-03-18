@@ -49,8 +49,12 @@ fun AppNavigation(
             val userId = backStackEntry.arguments?.getInt("userId") ?: -1
             AccountScreen(userId, navController, userDao, contactDao)
         }
-        composable(Screen.TripsScreen.route) {
-            TripsScreen(navController, activityDao)
+        composable(
+            route = "Trips_screen/{userId}",
+            arguments = listOf(navArgument("userId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getInt("userId") ?: -1
+            TripsScreen(userId, navController, activityDao, userDao)
         }
         composable(Screen.ContactsScreen.route) {
             ContactsScreen(navController, userDao, contactDao)

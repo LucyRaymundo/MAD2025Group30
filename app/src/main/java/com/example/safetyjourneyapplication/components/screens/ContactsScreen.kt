@@ -12,4 +12,6 @@ fun ContactsScreen(
     contactDao: ContactDao
 ) {
 
+    // allow user to set one contact as emergency contact so that when they press the emergency alert button in main screen = alert is sent to correct user
+
 }
