@@ -131,7 +131,7 @@ fun ConfirmUserExistsAlert(
 
     AlertDialog(
         onDismissRequest = onClose,
-        text = { Text("${userFirstName}, welcome back to StaySafe !") },
+        text = { Text("$userFirstName, Welcome back to StaySafe !") },
         confirmButton = {
             Button(onClick = {
                 onClose()

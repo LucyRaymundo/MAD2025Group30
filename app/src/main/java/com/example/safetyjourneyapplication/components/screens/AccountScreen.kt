@@ -14,6 +14,12 @@ fun AccountScreen(
     contactDao: ContactDao
     ) {
 
-    // call userId to get user info
+    // use userId to get name and other user stuff
+
+    // allow user to edit and delete their info
+
+    // allow user to access contacts screen from here
+
+    // display emergency contact in this screen
 
 }
