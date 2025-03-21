@@ -7,16 +7,15 @@ import java.time.LocalDateTime
 @Entity(tableName = "activities")
 data class Activity(
     @PrimaryKey var activityID: Int = 0,
-    val activityName: String,
+    val activityName: String = "",
     val activityUserID: Int,
-    val activityUserUsername: String,
-    val activityDescription: String,
-    val activityStartLocationID: Int,
+    val activityDescription: String = "",
+    val activityStartLocationID: Int = 0,
     val activityStartLocationName: String,
     val activityLeaveTimeDate: LocalDateTime = LocalDateTime.now(),
-    val activityDestinationID: Int,
+    val activityDestinationID: Int = 0,
     val activityDestinationName: String,
-    val activityArriveTimeDate: LocalDateTime = LocalDateTime.now(),
-    val activityStatusID: Int,
+    val activityArriveTimeDate: LocalDateTime,
+    val activityStatusID: Int = 0,
     val activityStatusName: String
 )

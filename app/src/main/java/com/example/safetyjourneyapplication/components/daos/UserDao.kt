@@ -12,6 +12,9 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: User)
 
+    @Query("SELECT userId FROM users WHERE userName = :userName")
+    suspend fun getUserId(userName: String): Int
+
     @Query("SELECT userId FROM users WHERE userName = :userName AND userPassword = :userPassword")
     suspend fun checkUserExists(userName: String, userPassword: String): Int?
 

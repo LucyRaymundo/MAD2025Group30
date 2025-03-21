@@ -162,6 +162,7 @@ fun ConfirmUserDoesNotExistAlert(
         },
         dismissButton = {
             Button(onClick = {
+                onClose()
                 onNavigateToSignUp()
             }) {
                 Text("Sign Up")

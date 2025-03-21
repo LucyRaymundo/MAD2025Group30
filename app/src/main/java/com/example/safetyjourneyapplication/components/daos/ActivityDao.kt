@@ -13,11 +13,11 @@ interface ActivityDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertActivity(activity: Activity)
 
-    @Query("SELECT * FROM activities WHERE activityUserID = :userId")
-    suspend fun getActivities(userId: Int): List<Activity>
+    @Query("SELECT * FROM activities WHERE activityUserID = :userId AND activityStatusName = :completed OR activityStatusName = :abandoned")
+    suspend fun getPastActivities(userId: Int, completed: String, abandoned: String): List<Activity>
 
-    @Query("SELECT * FROM activities WHERE activityUserID = :userId ORDER BY activityID DESC LIMIT 1")
-    suspend fun getMostRecentActivity(userId: Int): Activity?
+    @Query("SELECT * FROM activities WHERE activityUserID = :userId AND activityStatusName = :started OR activityStatusName = :paused ORDER BY activityID DESC LIMIT 1")
+    suspend fun getMostRecentActivity(userId: Int, started: String, paused: String): Activity?
 
     @Query("SELECT * FROM activities WHERE activityUserID = :userId AND activityLeaveTimeDate > :currentTimeDate")
     suspend fun getFutureActivities(userId: Int, currentTimeDate: LocalDateTime): List<Activity>

@@ -42,6 +42,7 @@ fun SignUpScreen(
     var password by remember { mutableStateOf("") }
 
     var newUser by remember { mutableStateOf<User?>(null) }
+    var userId by remember { mutableStateOf<Int?>(0) }
     var showConfirmAlert by remember {mutableStateOf(false)}
 
     Column(
@@ -109,6 +110,7 @@ fun SignUpScreen(
                 coroutineScope.launch {
                     newUser = User(userFirstName = firstName, userLastName = lastName, userPhone = phoneNum, userName = userName, userPassword = password)
                     userDao.insertUser(newUser!!)
+                    userId = userDao.getUserId(userName)
                 }
                 showConfirmAlert = true
             },
@@ -121,7 +123,7 @@ fun SignUpScreen(
                 ConfirmUserAddedAlert(
                     newUser = newUser!!,
                     onClose = { showConfirmAlert = false },
-                    onNavigate = { navController.navigate("Main_screen/${newUser!!.userId}")}
+                    onNavigate = { navController.navigate("Main_screen/${userId}")}
                 )
         }
 

@@ -12,6 +12,7 @@ import com.example.safetyjourneyapplication.components.daos.ContactDao
 import com.example.safetyjourneyapplication.components.daos.UserDao
 import com.example.safetyjourneyapplication.components.screens.MainScreen
 import com.example.safetyjourneyapplication.components.screens.AccountScreen
+import com.example.safetyjourneyapplication.components.screens.AddTripScreen
 import com.example.safetyjourneyapplication.components.screens.TripsScreen
 import com.example.safetyjourneyapplication.components.screens.ContactsScreen
 import com.example.safetyjourneyapplication.components.screens.LoginScreen
@@ -62,6 +63,13 @@ fun AppNavigation(
         ) { backStackEntry ->
             val userId = backStackEntry.arguments?.getInt("userId") ?: -1
             ContactsScreen(userId, navController, userDao, contactDao)
+        }
+        composable(
+            route = "AddTrip_screen/{userId}",
+            arguments = listOf(navArgument("userId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getInt("userId") ?: -1
+            AddTripScreen(userId, navController, activityDao, userDao)
         }
         composable(Screen.LoginScreen.route) {
             LoginScreen(navController, userDao)
