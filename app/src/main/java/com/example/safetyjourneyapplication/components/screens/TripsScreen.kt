@@ -54,11 +54,12 @@ fun TripsScreen(
 
     var showMenuItems by remember { mutableStateOf(false) }
 
+    //add search functionality
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)
-            .verticalScroll(rememberScrollState())
     ) {
 
         LaunchedEffect(userId) {
@@ -93,71 +94,63 @@ fun TripsScreen(
             }
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp)
-        ) {
+        Text(
+            "${userFirstName}'s journeys",
+            style = TextStyle(
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier.padding(top = 130.dp, bottom = 30.dp)
+        )
+
+        Text(
+            "Current Journey",
+            style = TextStyle(
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier.padding(top = 130.dp, bottom = 30.dp)
+        )
+
+        CurrentJourney(
+            userId = userId,
+            activityDao = activityDao
+        )
+
+        // map to show route
 
 
-            Text(
-                "${userFirstName}'s journeys",
-                style = TextStyle(
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.padding(top = 130.dp, bottom = 30.dp)
-            )
+        Text(
+            "Past journeys",
+            style = TextStyle(
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier.padding(top = 130.dp, bottom = 30.dp)
+        )
 
-            Text(
-                "Current Journey",
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.padding(top = 130.dp, bottom = 30.dp)
-            )
-
-            MostRecentOrCurrentJourney(
-                userId = userId,
-                activityDao = activityDao
-            )
+        PastJourneys(
+            userId = userId,
+            activityDao = activityDao
+        )
 
 
-            Text(
-                "Past journeys",
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.padding(top = 130.dp, bottom = 30.dp)
-            )
+        Text(
+            "Future journeys",
+            style = TextStyle(
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier.padding(top = 130.dp, bottom = 30.dp)
+        )
 
-            PastJourneys(
-                userId = userId,
-                activityDao = activityDao
-            )
-
-
-            Text(
-                "Future journeys",
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.padding(top = 130.dp, bottom = 30.dp)
-            )
-
-            FutureJourneys(
-                userId = userId,
-                activityDao = activityDao
-            )
+        FutureJourneys(
+            userId = userId,
+            activityDao = activityDao
+        )
 
 
-        }
     }
-
-
 }
 
 @Composable
@@ -207,7 +200,7 @@ fun MenuItemsForTripScreen(
 }
 
 @Composable
-fun MostRecentOrCurrentJourney(
+fun CurrentJourney(
     userId: Int,
     activityDao: ActivityDao
 ) {
@@ -219,7 +212,7 @@ fun MostRecentOrCurrentJourney(
 
         LaunchedEffect(userId) {
             coroutineScope.launch {
-                currentJourney = activityDao.getMostRecentActivity(userId, started, paused)
+                currentJourney = activityDao.getCurrentActivity(userId, started, paused)
             }
         }
 

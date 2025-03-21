@@ -18,7 +18,7 @@ interface ContactDao {
     suspend fun getContacts(userId: Int): List<Contact>
 
     @Query("SELECT contactUserName FROM contacts WHERE contactUserID = :userId AND emergencyAlertContact = 1")
-    suspend fun getEmergencyContact(userId: Int): String
+    suspend fun getEmergencyContact(userId: Int): String?
 
     // add delete and edit queries
 

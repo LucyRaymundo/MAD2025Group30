@@ -66,6 +66,8 @@ fun AddTripScreen(
     var activityArriveTimeDate by remember { mutableStateOf<LocalDateTime?>(null) }
 
     var startLocation by remember { mutableStateOf("") }
+    var startTime by remember { mutableStateOf("") }
+    var startDate by remember { mutableStateOf("") }
     var endLocation by remember { mutableStateOf("") }
 
     var journeyStatus by remember { mutableStateOf("") }
@@ -89,37 +91,31 @@ fun AddTripScreen(
             .verticalScroll(rememberScrollState())
     ) {
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-
-
-        IconButton(
-            onClick = { showMenuItems = !showMenuItems },
-            modifier = Modifier
-                .padding(top = 60.dp, start = 350.dp)
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            Icon(
-                imageVector = Icons.Default.Menu, contentDescription = "nav menu",
+
+
+            IconButton(
+                onClick = { showMenuItems = !showMenuItems },
                 modifier = Modifier
-                    .size(70.dp)
-            )
-        }
+                    .padding(top = 60.dp, start = 350.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Menu, contentDescription = "nav menu",
+                    modifier = Modifier
+                        .size(70.dp)
+                )
+            }
 
-        if (showMenuItems == true) {
+            if (showMenuItems == true) {
 
-            MenuItems(
-                navController = navController,
-                userId = userId
-            )
+                MenuItems(
+                    navController = navController,
+                    userId = userId
+                )
 
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp)
-        ) {
+            }
 
             Text(
                 "${userFirstName}, add a future journey !",
@@ -148,6 +144,26 @@ fun AddTripScreen(
                     .padding(top = 20.dp, bottom = 20.dp)
             )
 
+
+            TextField(
+                value = startTime,
+                onValueChange = { startTime = it },
+                label = { Text("Enter your departure time") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp, bottom = 20.dp)
+            )
+
+
+            TextField(
+                value = startDate,
+                onValueChange = { startDate = it },
+                label = { Text("Enter your starting location") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp, bottom = 20.dp)
+            )
+
             TextField(
                 value = journeyName,
                 onValueChange = { journeyName = it },
@@ -166,10 +182,11 @@ fun AddTripScreen(
                     .padding(top = 20.dp, bottom = 20.dp)
             )
 
-
             Button(
                 onClick = {
                     journeyStatus = Status.PENDING.id
+
+                    // convert time from text and date from strings to ldt
                     coroutineScope.launch {
                         /*newActivity = Activity(
                             activityName = activityName,
@@ -186,40 +203,8 @@ fun AddTripScreen(
                 },
                 modifier = Modifier.padding(top = 5.dp, start = 120.dp)
             ) {
-                Text("Start journey")
+                Text("Add journey")
             }
-        }
-
-
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
-@Composable
-fun datePicker () {
-    val context = LocalContext.current
-    val calendar = Calendar.getInstance()
-    var selectedDate by remember {
-        mutableStateOf(
-            SimpleDateFormat(
-                "dd/MM/yyyy",
-                Locale.getDefault()
-            ).format(calendar.time)
-        )
-    }
-
-    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = calendar.timeInMillis)
-
-    DatePicker(state = datePickerState)
-
-    LaunchedEffect(datePickerState.selectedDateMillis) {
-        datePickerState.selectedDateMillis?.let { millis ->
-            val newCalendar = Calendar.getInstance().apply { timeInMillis = millis }
-            selectedDate =
-                SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(newCalendar.time)
-
-
         }
 
 

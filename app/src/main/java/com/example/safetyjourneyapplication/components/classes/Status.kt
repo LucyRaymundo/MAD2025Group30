@@ -1,9 +1,9 @@
 package com.example.safetyjourneyapplication.components.classes
 
 enum class Status(val id: String, val order: Int) {
-    PENDING("pending", 1),
-    STARTED("started", 2),
-    PAUSED("paused", 3),
-    ABANDONED("abandoned", 4),
-    COMPLETED("completed", 5)
+    PENDING("Pending", 1),
+    STARTED("Started", 2),
+    PAUSED("Paused", 3),
+    ABANDONED("Abandoned", 4),
+    COMPLETED("Completed", 5)
 }

@@ -3,7 +3,11 @@ package com.example.safetyjourneyapplication.components.screens
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,6 +42,8 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -68,12 +74,16 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.Polyline
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.Calendar
@@ -95,11 +105,14 @@ fun MainScreen(
     var contactUsername by remember { mutableStateOf("") }
 
     var newActivity by remember { mutableStateOf<Activity?>(null) }
+    var activityId by remember { mutableIntStateOf(0) }
 
     var leaveTimeDate = LocalDateTime.now()
-    var arriveTimeDate by remember { mutableStateOf<LocalDateTime?>(null) }
 
-    var startLocation = LatLng(51.5906, -0.1412).toString() // change to actual location string
+    val arriveTimeDate = LocalDateTime.now().plusHours(1)
+
+    val startLocationString = "Muswell Hill, London, N10"
+
     var endLocation by remember { mutableStateOf("") }
     var journeyStatus by remember { mutableStateOf(Status.PENDING.id) }
 
@@ -110,6 +123,8 @@ fun MainScreen(
         position = CameraPosition.fromLatLngZoom(LatLng(51.5906, -0.1412), 12f)
     }
 
+    var endLocationLatLng by remember { mutableStateOf<LatLng?>(null) }
+
 
     LaunchedEffect(userId) {
         coroutineScope.launch {
@@ -118,164 +133,215 @@ fun MainScreen(
         }
     }
 
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+
+        Map(
+            cameraPositionState = cameraPositionState,
+            endLocationLatLng = endLocationLatLng
+        )
+
+        IconButton(
+            onClick = { showMenuItems = !showMenuItems },
+            modifier = Modifier
+                .padding(top = 70.dp, start = 350.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Menu, contentDescription = "nav menu",
+                modifier = Modifier
+                    .size(40.dp)
+            )
+        }
+
+        if (showMenuItems == true) {
+
+            MenuItems(
+                navController = navController,
+                contactDao = contactDao,
+                userId = userId
+            )
+
+        }
+    }
+
     Column(
         modifier = Modifier
-            .fillMaxSize()
             .padding(20.dp)
-            .verticalScroll(rememberScrollState())
     ) {
 
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-
-            Map(
-                endLocation = endLocation,
-                cameraPositionState = cameraPositionState
-            )
-
-            IconButton(
-                onClick = { showMenuItems = !showMenuItems },
-                modifier = Modifier
-                    .padding(top = 60.dp, start = 350.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Menu, contentDescription = "nav menu",
-                    modifier = Modifier
-                        .size(70.dp)
-                )
-            }
-
-            if (showMenuItems == true) {
-
-                MenuItems(
-                    navController = navController,
-                    contactDao = contactDao,
-                    userId = userId,
-                    contactUsername = contactUsername
-                )
-
-            }
-        }
-
-                Text(
-                    "Welcome ${userFirstName} ${userLastName}, start your next journey !",
-                    style = TextStyle(
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.padding(top = 110.dp)
-                )
-
-            Button(
-                onClick = {
-                    if (journeyStatus == Status.STARTED.id) {
-                        journeyStatus = Status.PAUSED.id
-                        // send notification to selected emergency contact
-                        //StatusChangeAlertToContact()
-                        coroutineScope.launch {
-                            contactUsername = contactDao.getEmergencyContact(userId = userId)
-                            showStatusUpdateAlert = true
-
-                            // update activity in database
-                        }
-
+        Button(
+            onClick = {
+                journeyStatus = if (journeyStatus == Status.STARTED.id) {
+                    Status.PAUSED.id
                 } else {
-                    journeyStatus = Status.STARTED.id
+                    Status.STARTED.id
                 }
-                    showStatusUpdateAlert = true
-                          },
-                modifier = Modifier
-                    .padding(top = 5.dp, start = 120.dp)
-                    .size(20.dp)
-            ) {
-                Text("Status: $journeyStatus")
-            }
 
-        if(showStatusUpdateAlert) {
-            StatusChangeAlertToContact (
-                onClose = { showStatusUpdateAlert = false },
-                contactUsername = contactUsername)
+                coroutineScope.launch {
+
+                    contactUsername = contactDao.getEmergencyContact(userId = userId) ?: ""
+                    showStatusUpdateAlert = true
+                    }
+
+                    //activityDao.updateStatus(journeyStatus, activityId)
+                },
+            modifier = Modifier
+                .padding(top = 50.dp, start = 15.dp)
+        ) {
+            Text("Status: $journeyStatus")
         }
 
+        if (showStatusUpdateAlert) {
+            StatusChangeAlertToContact(
+                onClose = { showStatusUpdateAlert = false },
+                contactUsername = contactUsername
+            )
+        }
 
-                TextField(
-                    value = startLocation,
-                    onValueChange = {},
-                    label = { Text("Enter your start location") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 430.dp, bottom = 3.dp)
-                )
-
-                TextField(
-                    value = endLocation,
-                    onValueChange = { endLocation = it },
-                    label = { Text("Enter your destination") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp, bottom = 10.dp)
-                )
+        Text(
+            "Welcome ${userFirstName} ${userLastName}, start your next journey !",
+            style = TextStyle(
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier.padding(top = 40.dp)
+        )
 
 
-                Button(
-                    onClick = {
-                        journeyStatus = Status.STARTED.id
-                        coroutineScope.launch {
-                            /* newActivity = Activity(
+
+        TextField(
+            value = startLocationString,
+            onValueChange = {},
+            label = { Text("Enter your start location") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 430.dp, bottom = 3.dp)
+        )
+
+        TextField(
+            value = endLocation.replaceFirstChar { it.uppercase() } ,
+            onValueChange = { endLocation = it},
+            label = { Text("Enter your destination (Area, City, Postcode") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp, bottom = 10.dp)
+        )
+
+        val context = LocalContext.current
+
+        Button(
+            onClick = {
+
+                journeyStatus = Status.STARTED.id
+
+                coroutineScope.launch {
+                        if (endLocation.isNotBlank()) {
+
+                            endLocationLatLng = convertEndLocationFromStringToLatLng(
+                                endLocation = endLocation,
+                                context = context
+                            )
+
+                            endLocationLatLng?.let {
+                                cameraPositionState.position = CameraPosition.fromLatLngZoom(it, 14f)
+                            }
+                        }
+                    newActivity = Activity(
                             activityUserID = userId,
-                            activityStartLocationName = startLocation,
+                            activityStartLocationName = startLocationString,
                             activityLeaveTimeDate = leaveTimeDate,
                             activityDestinationName = endLocation,
-                            activityArriveTimeDate = ,
+                            activityArriveTimeDate = arriveTimeDate,
                             activityStatusName = journeyStatus)
-                            activityDao.insertActivity(newActivity!!) */
-                        }
-                    },
-                    modifier = Modifier.padding(top = 5.dp, start = 120.dp)
-                ) {
-                    Text("Start journey")
+                            activityDao.insertActivity(newActivity!!)
+
+                    activityId = activityDao.getActivityId(userId)
                 }
-
-
-            }
-        }
-
-
-    @Composable
-    fun Map(
-        endLocation: String,
-        cameraPositionState: CameraPositionState
-    ) {
-        GoogleMap(
-            modifier = Modifier
-                .width(450.dp)
-                .height(600.dp)
-                .padding(top = 240.dp),
-            cameraPositionState = cameraPositionState
+            },
+            modifier = Modifier.padding(top = 20.dp, start = 120.dp)
         ) {
-            Marker(
-                state = MarkerState(position = LatLng(51.5906, -0.1412)),
-                title = "London",
-                snippet = "Welcome to London!"
-            )
+            Text("Start journey")
         }
     }
+}
 
 @Composable
-fun convertEndLocationFromStringToLatLng(
-    endLocation: String
-): LatLng? {
-    val context = LocalContext.current
-    var endLocationLatLng by remember {
-        mutableStateOf<LatLng?>(null)
+fun Map(
+    cameraPositionState: CameraPositionState,
+    endLocationLatLng: LatLng?
+) {
+    // Remember the marker state to prevent recomposition issues
+    val markerState =
+        remember { MarkerState(position = endLocationLatLng ?: LatLng(51.5906, -0.1412)) }
+
+    // Remember the polyline points list so that it doesn't get cleared on recomposition
+    val polylinePoints = remember { mutableStateListOf<LatLng>() }
+
+    // Add starting and ending points to the polyline
+    LaunchedEffect(endLocationLatLng) {
+        polylinePoints.clear() // Clear previous points
+        polylinePoints.add(LatLng(51.5906, -0.1412)) // Start point (Muswell Hill)
+        if (endLocationLatLng != null) {
+            polylinePoints.add(endLocationLatLng)
+        } // Add the end point
     }
-
-    // convert end location to lat lng
-
-    return endLocationLatLng
+    Log.d("Map", "Polyline points: $polylinePoints") // Debug log to check points
 
 
+    // Define the map UI and set the marker and polyline
+    GoogleMap(
+        modifier = Modifier
+            .width(450.dp)
+            .height(600.dp)
+            .padding(top = 270.dp),
+        cameraPositionState = cameraPositionState
+    ) {
+        // Place the destination marker
+        Marker(
+            state = markerState
+        )
+
+        // Draw the polyline
+        Polyline(
+            points = polylinePoints,
+            color = Color.Blue,
+            width = 10f
+        )
+    }
+}
+
+
+
+/* @Suppress("DEPRECATION")
+suspend fun convertEndLocationFromStringToLatLng(context: Context, endLocation: String): LatLng? {
+    return withContext(Dispatchers.IO) {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        try {
+            val addressList: List<Address>? = geocoder.getFromLocationName(endLocation, 1)
+            addressList?.firstOrNull()?.let { address ->
+                LatLng(address.latitude, address.longitude)
+            }
+        } catch (e: Exception) {
+            null
+        }
+    }
+} */
+
+@Suppress("DEPRECATION")
+fun convertEndLocationFromStringToLatLng(
+    endLocation: String,
+    context: Context
+): LatLng? {
+
+    val geocoder = Geocoder(context, Locale.getDefault())
+    val addressList: List<Address>? = geocoder.getFromLocationName(endLocation, 1)
+
+    if (addressList != null) {
+        val address = addressList[0]
+        return LatLng(address.latitude, address.longitude)
+    }
+    return null
 }
 
 @Composable
@@ -284,7 +350,6 @@ fun StatusChangeAlertToContact (
     contactUsername: String
 
 ) {
-
 
     AlertDialog(
         onDismissRequest = { onClose() },
@@ -306,12 +371,13 @@ fun StatusChangeAlertToContact (
     fun MenuItems(
         navController: NavController,
         contactDao: ContactDao,
-        userId: Int,
-        contactUsername: String
+        userId: Int
     ) {
 
         val coroutineScope = rememberCoroutineScope()
         var showEmergencyAlert by remember { mutableStateOf(false) }
+        var contactUsername by remember { mutableStateOf("") }
+
 
         Row {
 
@@ -343,7 +409,7 @@ fun StatusChangeAlertToContact (
             IconButton(
                 onClick = {
                     coroutineScope.launch {
-                        contactUsername = contactDao.getEmergencyContact(userId = userId)
+                        contactUsername = contactDao.getEmergencyContact(userId = userId) ?: ""
                         showEmergencyAlert = true
                     }
                 },
@@ -358,7 +424,7 @@ fun StatusChangeAlertToContact (
                 )
             }
 
-            if (contactUsername != "" && showEmergencyAlert == true) {
+            if (showEmergencyAlert == true) {
 
                 EmergencyAlert(
                     contactUsername = contactUsername,
